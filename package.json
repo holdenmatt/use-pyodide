@@ -1,0 +1,21 @@
+{
+  "name": "pyodide-worker",
+  "version": "0.1.0",
+  "description": "Run pyodide in a web worker",
+  "author": "Matt Holden",
+  "license": "MIT",
+  "homepage": "https://github.com/holdenmatt/pyodide-worker",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/holdenmatt/pyodide-worker"
+  },
+  "keywords": [
+    "pyodide",
+    "worker",
+    "react"
+  ],
+  "dependencies": {
+    "comlink": "^4.4.1",
+    "pyodide": "^0.23.2"
+  }
+}
