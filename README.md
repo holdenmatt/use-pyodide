@@ -83,9 +83,22 @@ you will likely want to use dynamic loading to load pyodide only in the browser:
 
 ```
 const PyodideProvider = dynamic(
-() => import("pyodide-worker").then((mod) => mod.PyodideProvider),
-{
-ssr: false,
-}
+    () => import("pyodide-worker").then((mod) => mod.PyodideProvider),
+    {
+        ssr: false,
+    }
 );
+```
+
+## Importing Typescript
+
+Instead of compiling to JS, this library is intended to be imported from another Typescript project.
+
+If you're using NextJS, you should modify your `next.config.js` file to enable tranpiling:
+
+```
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  transpilePackages: ["pyodide-worker"]
+}
 ```
