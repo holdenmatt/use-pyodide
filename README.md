@@ -94,7 +94,7 @@ const PyodideProvider = dynamic(
 
 Instead of compiling to JS, this library is intended to be imported from another Typescript project.
 
-If you're using NextJS, you should modify your `next.config.js` file to enable tranpiling:
+If you're using NextJS, you should modify your `next.config.js` file to enable transpiling:
 
 ```
 /** @type {import('next').NextConfig} */
