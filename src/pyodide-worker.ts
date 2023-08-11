@@ -79,7 +79,10 @@ async function _loadPyodide(packages: string[] = []): Promise<void> {
  * (and the code doesn't end with a semicolon), the returned promise
  * will resolve to the value of this expression.
  */
-async function runPython(code: string, globals?: Record<string, JSONValue>): Promise<unknown> {
+async function runPython(
+  code: string,
+  globals?: Record<string, JSONValue>
+): Promise<unknown> {
   await _pyodideReady;
 
   const options = {

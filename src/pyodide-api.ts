@@ -20,9 +20,9 @@ export interface Pyodide {
 }
 
 /**
- * Initialize pyodide and load some given packages.
+ * Initialize the pyodide worker and load some given packages.
  */
-export const initialize = async (packages?: string[]): Promise<Pyodide> => {
+export const initializeWorker = async (packages?: string[]): Promise<Pyodide> => {
   if (!_worker) {
     _worker = new Worker(new URL("./pyodide-worker", import.meta.url));
     _runner = Comlink.wrap(_worker);
@@ -34,17 +34,6 @@ export const initialize = async (packages?: string[]): Promise<Pyodide> => {
     runPythonJson,
     terminate,
   };
-};
-
-/**
- * Terminate the worker.
- */
-const terminate = () => {
-  _worker?.terminate();
-  _worker = null;
-
-  _runner?.[Comlink.releaseProxy]();
-  _runner = null;
 };
 
 /**
@@ -65,7 +54,7 @@ const runPython = async (
 /**
  * Run a Python code string, and parse its result as JSON.
  */
-export const runPythonJson = async (
+const runPythonJson = async (
   code: string,
   globals?: Record<string, JSONValue>
 ): Promise<JSONValue | null> => {
@@ -76,4 +65,15 @@ export const runPythonJson = async (
   }
 
   return null;
+};
+
+/**
+ * Terminate the worker.
+ */
+const terminate = () => {
+  _worker?.terminate();
+  _worker = null;
+
+  _runner?.[Comlink.releaseProxy]();
+  _runner = null;
 };

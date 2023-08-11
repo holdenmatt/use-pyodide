@@ -1,31 +1,24 @@
-import { useContext, useEffect, useState } from "react";
-
 import { Pyodide } from "./pyodide-api";
-import { PyodideContext } from "./PyodideProvider";
+
+import { useAsync } from "react-async-hook";
+import { getPyodide } from "./initializePyodide";
 
 /**
- * React hook to get the global pyodide object, after loading finishes.
+ * React hook to access the global pyodide object, after loading finishes.
  */
-const usePyodide = () => {
-  const [pyodide, setPyodide] = useState<Pyodide>();
-  const [loading, setLoading] = useState(true);
+export const usePyodide = (): {
+  pyodide: Pyodide | undefined;
+  loading: boolean;
+  error: Error | undefined;
+} => {
+  const {
+    result: pyodide,
+    loading,
+    error,
+  } = useAsync(async () => {
+    const pyodide = await getPyodide();
+    return pyodide;
+  }, []);
 
-  const context = useContext(PyodideContext);
-  if (context === null) {
-    throw new Error("usePyodide must be used within a <PyodideProvider>");
-  }
-
-  useEffect(() => {
-    const waitForLoaded = async () => {
-      if (context) {
-        setPyodide(await context);
-        setLoading(false);
-      }
-    };
-    waitForLoaded();
-  }, [context]);
-
-  return { loading, pyodide };
+  return { pyodide, loading, error };
 };
-
-export default usePyodide;
