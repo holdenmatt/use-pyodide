@@ -2,6 +2,7 @@
  * Use a Web Worker to initialize and run pyodide code
  * without blocking the main thread.
  */
+import { JSONValue } from "@holdenmatt/ts-utils";
 import { expose } from "comlink";
 import { loadPyodide, PyodideInterface, version } from "pyodide";
 
@@ -73,10 +74,12 @@ async function _loadPyodide(packages: string[] = []): Promise<void> {
  *
  * Optionally, pass in global vars to the Python execution namespace.
  *
- * If the last statement is an expression (with no semicolon), the returned
- * promise will resolve to the value of this expression.
+ * Returns a promise which resolves when execution completes.
+ * If the last statement in the Python code is an expression
+ * (and the code doesn't end with a semicolon), the returned promise
+ * will resolve to the value of this expression.
  */
-async function runPython(code: string, globals?: Record<string, any>): Promise<any> {
+async function runPython(code: string, globals?: Record<string, JSONValue>): Promise<unknown> {
   await _pyodideReady;
 
   const options = {
@@ -92,7 +95,7 @@ async function runPython(code: string, globals?: Record<string, any>): Promise<a
 
 export interface PyodideRunner {
   initialize: (packages?: string[]) => Promise<void>;
-  runPython: (code: string, globals?: Record<string, any>) => Promise<any>;
+  runPython: (code: string, globals?: Record<string, JSONValue>) => Promise<unknown>;
   version: string;
 }
 

@@ -1,5 +1,5 @@
 /**
- * Expose a pyodide API in the main thread, which executes
+ * Expose a pyodide API to the main thread, which executes
  * code in a web worker (via comlink).
  */
 import * as Comlink from "comlink";
@@ -11,10 +11,10 @@ let _worker: Worker | null = null;
 let _runner: Comlink.Remote<PyodideRunner> | null = null;
 
 export interface Pyodide {
-  runPython: (code: string, globals?: Record<string, any>) => Promise<any>;
+  runPython: (code: string, globals?: Record<string, JSONValue>) => Promise<unknown>;
   runPythonJson: (
     code: string,
-    globals?: Record<string, any>
+    globals?: Record<string, JSONValue>
   ) => Promise<JSONValue | null>;
   terminate: () => void;
 }
@@ -52,8 +52,8 @@ const terminate = () => {
  */
 const runPython = async (
   code: string,
-  globals?: Record<string, any>
-): Promise<any> => {
+  globals?: Record<string, JSONValue>
+): Promise<unknown> => {
   if (!_worker || !_runner) {
     throw new Error("pyodide isn't loaded yet");
   }
@@ -67,7 +67,7 @@ const runPython = async (
  */
 export const runPythonJson = async (
   code: string,
-  globals?: Record<string, any>
+  globals?: Record<string, JSONValue>
 ): Promise<JSONValue | null> => {
   const result = (await runPython(code, globals)) as string;
   if (result) {
