@@ -5,6 +5,7 @@
 import { JSONValue } from "@holdenmatt/ts-utils";
 import { expose } from "comlink";
 import { loadPyodide, PyodideInterface, version } from "pyodide";
+import { DEBUG } from "./initializePyodide";
 
 const indexURL = `https://cdn.jsdelivr.net/pyodide/v${version}/full/`;
 
@@ -51,10 +52,10 @@ async function _loadPyodide(packages: string[] = []): Promise<void> {
   self.pyodide = await loadPyodide({
     indexURL,
     stdout: (msg: string) => {
-      console.log("loadPyodide stdout: ", msg);
+      DEBUG && console.log("loadPyodide stdout: ", msg);
     },
     stderr: (msg: string) => {
-      console.log("loadPyodide stderr: ", msg);
+      DEBUG && console.log("loadPyodide stderr: ", msg);
     },
   });
 
