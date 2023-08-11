@@ -5,7 +5,7 @@
 import * as Comlink from "comlink";
 
 import { PyodideRunner } from "./pyodide-worker";
-import { JSONValue } from "./types";
+import { JSONValue } from "@holdenmatt/ts-utils";
 
 let _worker: Worker | null = null;
 let _runner: Comlink.Remote<PyodideRunner> | null = null;
@@ -50,7 +50,10 @@ const terminate = () => {
 /**
  * Run a Python code string and return the value of the last statement.
  */
-const runPython = async (code: string, globals?: Record<string, any>): Promise<any> => {
+const runPython = async (
+  code: string,
+  globals?: Record<string, any>
+): Promise<any> => {
   if (!_worker || !_runner) {
     throw new Error("pyodide isn't loaded yet");
   }

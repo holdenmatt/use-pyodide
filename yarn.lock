@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@holdenmatt/ts-utils@^0.1.10":
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/@holdenmatt/ts-utils/-/ts-utils-0.1.10.tgz#3d2fe357f89eec05b26371313f3a082a81aa010d"
+  integrity sha512-WY9JsuOmumEBRvZ6oK5+OXMjdfz+aD6C/UjaaaB7mU8tqduw6oYVcDkUo5hcakRwB+ChDsxZaGGdCBTTkrt8kw==
+
 "@types/prop-types@*":
   version "15.7.5"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.5.tgz#5f19d2b85a98e9558036f6a3cacc8819420f05cf"

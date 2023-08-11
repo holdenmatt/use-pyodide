@@ -1,23 +1,20 @@
 {
-  "name": "pyodide-worker",
-  "version": "0.1.1",
-  "description": "Run pyodide in a web worker",
+  "name": "use-pyodide",
+  "version": "0.1.2",
+  "description": "React hook to run pyodide in a web worker",
   "author": "Matt Holden",
   "license": "MIT",
-  "homepage": "https://github.com/holdenmatt/pyodide-worker",
+  "homepage": "https://github.com/holdenmatt/use-pyodide",
   "repository": {
     "type": "git",
-    "url": "https://github.com/holdenmatt/pyodide-worker"
+    "url": "https://github.com/holdenmatt/use-pyodide"
   },
-  "keywords": [
-    "pyodide",
-    "worker",
-    "react"
-  ],
+  "types": "./dist/types/index.d.ts",
   "scripts": {
-    "build": "tsc --declaration"
+    "build": "rm -rf dist && tsc --declaration --listEmittedFiles"
   },
   "dependencies": {
+    "@holdenmatt/ts-utils": "^0.1.10",
     "comlink": "^4.4.1",
     "pyodide": "^0.23.2"
   },
@@ -27,5 +24,12 @@
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
-  }
+  },
+  "keywords": [
+    "pyodide",
+    "web",
+    "worker",
+    "react",
+    "hook"
+  ]
 }

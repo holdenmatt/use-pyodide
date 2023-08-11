@@ -14,7 +14,9 @@
     "incremental": true,
     "strictNullChecks": true,
     "declaration": true,
-    "noEmit": true
+    "emitDeclarationOnly": true,
+    "declarationDir": "./dist/types",
+    "outDir": "./dist"
   },
   "include": ["**/*.ts", "**.*/tsx"],
   "exclude": ["node_modules"]
