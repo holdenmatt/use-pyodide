@@ -1,6 +1,6 @@
 # use-pyodide
 
-A simple React hook to run Python (using pyodide) in a web worker.
+A simple React hook to run Python code (using pyodide) in a web worker.
 
 ## Install
 
@@ -31,9 +31,12 @@ import { usePyodide } from "use-pyodide";
 const MyComponent = () => {
     const { pyodide, loading, error } = usePyodide();
 
-    if (pyodide) {
-        // Do something
-    }
+    useEffect(() => {
+        if (pyodide) {
+            pyodide.runPython(`print("👋 from Python")`)
+        }
+    }, [pyodide]);
+
     ...
 }
 ```
@@ -81,7 +84,7 @@ initializePyodide({
 Many packages have been built for pyodide:
 https://pyodide.org/en/stable/usage/packages-in-pyodide.html
 
-In addition to these, pure Python packages with wheels typically work.
+In addition to these, pure Python packages typically work.
 
 Packages are installed using `micropip.install`, as described
 [here](https://pyodide.org/en/stable/usage/loading-packages.html#loading-packages).
@@ -141,3 +144,10 @@ import { getPyodide } from "use-pyodide";
 
 const pyodide: Pyodide = await getPyodide();
 ```
+
+## License
+
+MIT license.
+
+Feel free to copy/fork code as you like. No need for attribution, but if you
+find this library helpful or build something cool with it, [let me know!](https://twitter.com/holdenmatt/)
