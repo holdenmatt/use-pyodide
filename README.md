@@ -8,6 +8,18 @@ A simple React hook to run Python (using pyodide) in a web worker.
 npm install use-pyodide
 ```
 
+If you're using NextJS, modify your `next.config.js` file to enable transpiling from Typescript:
+
+```
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  transpilePackages: ["use-pyodide"]
+}
+```
+
+(If you'd prefer building some other way,
+[let me know](https://twitter.com/holdenmatt/).)
+
 ## usePyodide
 
 To initialize pyodide and use it in a React component,
@@ -17,7 +29,7 @@ just call the `usePyodide` hook:
 import { usePyodide } from "use-pyodide";
 
 const MyComponent = () => {
-    const { loading, pyodide } = usePyodide();
+    const { pyodide, loading, error } = usePyodide();
 
     if (pyodide) {
         // Do something
@@ -26,60 +38,67 @@ const MyComponent = () => {
 }
 ```
 
-## Runs in a web worker
+The first time `usePyodide` is called, it will download the Pyodide
+wasm bundle from JsDelivr and create a web worker to run it.
 
-To avoid blocking the main UI thread, we run pyodide in a background web worker,
-as described here:
+Multiple calls are fine, only one singleton instance will be created.
 
-https://pyodide.org/en/stable/usage/webworker.html
+## Preloading
 
-## Quickstart
+Loading pyodide can take several seconds, so you may want to initialize
+it when your app first loads, before it's actually needed in components.
 
-Install with:
-
-```
-npm install pyodide-worker
-```
-
-Then wrap your app in a provider that will make pyodide accessible to child components:
+You can optionally do that by calling `initializePyodide`, like this:
 
 ```
-import { PyodideProvider } from "pyodide-worker";
+import { initializePyodide } from "use-pyodide";
 
-const pythonPackages = ["sqlfluff==2.0.5"];
-
-export default function App() {
-    return (
-        <PyodideProvider packages={pythonPackages}>
-            {... your app ...}
-        </PyodideProvider>
-    )
+const MyApp = () => {
+    useEffect(() => {
+        initializePyodide({ debug: true });
+    }, []);
 }
 ```
 
-Within a React component, you can now access pyodide with the `usePyodide` hook:
+## Debug logging
+
+If you call `initializePyodide` with `debug: true`, debug messages from
+stdout/stderr and elapsed times will be logged to the browser console,
+which can be useful during development.
+
+## Loading packages
+
+By default, only the Python standard library is loaded.
+
+To load other packages, just pass an array of package names to `initializePyodide`.
 
 ```
-const { pyodide, loading } = usePyodide();
+initializePyodide({
+    packages: ["numpy", "pandas"]
+})
 ```
 
-You can also access pyodide in non-React contexts like this:
+Many packages have been built for pyodide:
+https://pyodide.org/en/stable/usage/packages-in-pyodide.html
 
-```
-const pyodide = await getPyodide();
-```
+In addition to these, pure Python packages with wheels typically work.
+
+Packages are installed using `micropip.install`, as described
+[here](https://pyodide.org/en/stable/usage/loading-packages.html#loading-packages).
 
 ## Executing python
 
-You can then run Python code in your browser, and optionally pass in global vars
-to the Python execution namespace.
+Once you have a `pyodide` object, you can use it to execute Python code
+in your browser!
+
+You can optionally pass in global vars to the Python execution namespace.
 
 ```
 const pythonCode = "...";
 
 const result = await pyodide.runPython(pythonCode, {
     args: {
-        name: "Matt"
+        name: "Guido"
     }
 });
 ```
@@ -103,32 +122,22 @@ As a convenience, if your Python script returns a JSON string as its last expres
 use `runPythonJson` to automatically JSON.parse the result:
 
 ```
-const jsonObject = await pyodide.runPythonJson(code, vars);
+const jsonObject = await pyodide.runPythonJson(code, globals);
 ```
 
-## SSR
+## Runs in a web worker
 
-If you're using a framework such as Next.js that supports server-side rendering (SSR),
-you will likely want to use dynamic loading to load pyodide only in the browser:
+To avoid blocking the main UI thread, we run pyodide in a background web worker
+(using comlink), as described here:
 
-```
-const PyodideProvider = dynamic(
-    () => import("pyodide-worker").then((mod) => mod.PyodideProvider),
-    {
-        ssr: false,
-    }
-);
-```
+https://pyodide.org/en/stable/usage/webworker.html
 
-## Importing Typescript
+## Accessing outside React
 
-Instead of compiling to JS, this library is intended to be imported from another Typescript project.
-
-If you're using NextJS, you should modify your `next.config.js` file to enable transpiling:
+If needed, you can access pyodide outside of React components like this:
 
 ```
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  transpilePackages: ["pyodide-worker"]
-}
+import { getPyodide } from "use-pyodide";
+
+const pyodide: Pyodide = await getPyodide();
 ```
