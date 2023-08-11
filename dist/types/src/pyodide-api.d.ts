@@ -1,7 +1,7 @@
-import { JSONValue } from "./types";
+import { JSONValue } from "@holdenmatt/ts-utils";
 export interface Pyodide {
-    runPython: (code: string, globals?: Record<string, any>) => Promise<any>;
-    runPythonJson: (code: string, globals?: Record<string, any>) => Promise<JSONValue | null>;
+    runPython: (code: string, globals?: Record<string, JSONValue>) => Promise<unknown>;
+    runPythonJson: (code: string, globals?: Record<string, JSONValue>) => Promise<JSONValue | null>;
     terminate: () => void;
 }
 /**
@@ -11,4 +11,4 @@ export declare const initialize: (packages?: string[]) => Promise<Pyodide>;
 /**
  * Run a Python code string, and parse its result as JSON.
  */
-export declare const runPythonJson: (code: string, globals?: Record<string, any>) => Promise<JSONValue | null>;
+export declare const runPythonJson: (code: string, globals?: Record<string, JSONValue>) => Promise<JSONValue | null>;

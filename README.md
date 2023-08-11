@@ -1,6 +1,36 @@
-# pyodide-worker
+# use-pyodide
 
-Run Pyodide in a React app using a web worker, as described here:
+A simple React hook to run Python (using pyodide) in a web worker.
+
+## Install
+
+```
+npm install use-pyodide
+```
+
+## usePyodide
+
+To initialize pyodide and use it in a React component,
+just call the `usePyodide` hook:
+
+```
+import { usePyodide } from "use-pyodide";
+
+const MyComponent = () => {
+    const { loading, pyodide } = usePyodide();
+
+    if (pyodide) {
+        // Do something
+    }
+    ...
+}
+```
+
+## Runs in a web worker
+
+To avoid blocking the main UI thread, we run pyodide in a background web worker,
+as described here:
+
 https://pyodide.org/en/stable/usage/webworker.html
 
 ## Quickstart
