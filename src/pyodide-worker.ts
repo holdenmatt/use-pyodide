@@ -5,7 +5,7 @@
 import { JSONValue } from "@holdenmatt/ts-utils";
 import { expose } from "comlink";
 import { loadPyodide, PyodideInterface, version } from "pyodide";
-import { DEBUG } from "./initializePyodide";
+import { DEBUG } from "./config";
 
 const indexURL = `https://cdn.jsdelivr.net/pyodide/v${version}/full/`;
 
