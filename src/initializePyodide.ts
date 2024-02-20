@@ -1,7 +1,7 @@
 import { logElapsedTime } from "@holdenmatt/ts-utils";
 
-export let DEBUG: boolean | undefined;
 import { initializeWorker, Pyodide } from "./pyodide-api";
+import { DEBUG, setDebug } from "./config";
 
 let pyodide: Promise<Pyodide> | undefined;
 
@@ -16,7 +16,7 @@ export async function initializePyodide(options?: {
   packages?: string[];
 }): Promise<Pyodide> {
   const { debug = false, packages } = options || {};
-  DEBUG = debug;
+  setDebug(debug)
 
   if (pyodide === undefined) {
     pyodide = _initializePyodide(packages);
