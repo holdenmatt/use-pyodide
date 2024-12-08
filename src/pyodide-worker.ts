@@ -22,7 +22,6 @@ declare global {
 let _pyodideReady: Promise<void> | null = null;
 let _output: ((text: string) => void) | null = null;
 
-
 /**
  * Initialize pyodide and set a singleton promise to await it being ready.
  * This should only be called once.
