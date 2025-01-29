@@ -16,6 +16,7 @@ export interface Pyodide {
     code: string,
     globals?: Record<string, JSONValue>
   ) => Promise<JSONValue | null>;
+  setOutput: (callback: ((text: string) => void) | null) => void;
   terminate: () => void;
 }
 
@@ -32,6 +33,7 @@ export const initializeWorker = async (packages?: string[]): Promise<Pyodide> =>
   return {
     runPython,
     runPythonJson,
+    setOutput,
     terminate,
   };
 };
@@ -65,6 +67,16 @@ const runPythonJson = async (
   }
 
   return null;
+};
+
+/**
+ * Redirect Pyodide output stream.
+ */
+const setOutput = (callback: ((text: string) => void) | null): void => {
+  if (!_runner) {
+    throw new Error("pyodide isn't loaded yet");
+  }
+  _runner.setOutput(Comlink.proxy(callback));
 };
 
 /**

@@ -135,6 +135,21 @@ To avoid blocking the main UI thread, we run pyodide in a background web worker
 
 https://pyodide.org/en/stable/usage/webworker.html
 
+## Capturing python output
+
+You can capture output from Python's print statements and error messages using `setOutput`. Pass a callback function that will be called with each piece of output text:
+
+```
+// Simple logging
+pyodide.setOutput((text) => {
+  console.log('Python output:', text);
+});
+```
+
+Read more redirecting standard streams in pyodide here:
+
+https://pyodide.org/en/stable/usage/streams.html
+
 ## Accessing outside React
 
 If needed, you can access pyodide outside of React components like this:

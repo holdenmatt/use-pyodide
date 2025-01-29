@@ -20,6 +20,7 @@ declare global {
 //
 
 let _pyodideReady: Promise<void> | null = null;
+let _output: ((text: string) => void) | null = null;
 
 /**
  * Initialize pyodide and set a singleton promise to await it being ready.
@@ -43,6 +44,14 @@ function initialize(
 }
 
 /**
+ * Set Pyodide output stream
+ *
+ */
+function setOutput(callback: ((text: string) => void) | null): void {
+  _output = callback;
+}
+
+/**
  * Load pyodide with some given packages.
  *
  * Loads all packages with micropip, as recommended here:
@@ -52,9 +61,15 @@ async function _loadPyodide(packages: string[] = []): Promise<void> {
   self.pyodide = await loadPyodide({
     indexURL,
     stdout: (msg: string) => {
+      if (_output) {
+        _output(msg);
+      }
       DEBUG && console.log("loadPyodide stdout: ", msg);
     },
     stderr: (msg: string) => {
+      if (_output) {
+        _output(msg);
+      }
       DEBUG && console.log("loadPyodide stderr: ", msg);
     },
   });
@@ -100,12 +115,14 @@ async function runPython(
 export interface PyodideRunner {
   initialize: (packages?: string[]) => Promise<void>;
   runPython: (code: string, globals?: Record<string, JSONValue>) => Promise<unknown>;
+  setOutput: (callback: ((text: string) => void) | null) => void;
   version: string;
 }
 
 const pyodide: PyodideRunner = {
   initialize,
   runPython,
+  setOutput,
   version,
 };
 
