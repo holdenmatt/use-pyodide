@@ -12,5 +12,6 @@ declare global {
 export interface PyodideRunner {
     initialize: (packages?: string[]) => Promise<void>;
     runPython: (code: string, globals?: Record<string, JSONValue>) => Promise<unknown>;
+    setOutput: (callback: ((text: string) => void) | null) => void;
     version: string;
 }
