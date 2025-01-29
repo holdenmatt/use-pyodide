@@ -76,7 +76,7 @@ const setOutput = (callback: ((text: string) => void) | null): void => {
   if (!_runner) {
     throw new Error("pyodide isn't loaded yet");
   }
-  _runner.setOutput(Comlink.proxy(callback));
+  _runner.setOutput(callback ? Comlink.proxy<(text: string) => void>(callback) : null);
 };
 
 /**
