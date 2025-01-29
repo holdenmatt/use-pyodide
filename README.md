@@ -166,3 +166,7 @@ MIT license.
 
 Feel free to copy/fork code as you like. No need for attribution, but if you
 find this library helpful or build something cool with it, [let me know!](https://twitter.com/holdenmatt/)
+
+## Changelog
+
+- 0.1.4: Add setOutput, update dependencies
